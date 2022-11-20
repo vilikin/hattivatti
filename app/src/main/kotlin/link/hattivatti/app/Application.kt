@@ -1,11 +1,11 @@
-package link.hattivatti.lambda
+package link.hattivatti.app
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class LambdaApplication
+class Application
 
 fun main(args: Array<String>) {
-	runApplication<LambdaApplication>(*args)
+	runApplication<Application>(*args)
 }

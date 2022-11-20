@@ -20,8 +20,8 @@ repositories {
 }
 
 extra["springCloudVersion"] = "2021.0.5"
-extra["awsLambdaEventsVersion"] = "3.9.0"
-extra["awsLambdaCoreVersion"] = "1.1.0"
+extra["awsLambdaEventsVersion"] = "3.11.0"
+extra["awsLambdaCoreVersion"] = "1.2.2"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter")
@@ -55,7 +55,7 @@ tasks.withType<Test> {
 tasks.withType<Jar> {
     manifest {
         attributes(mapOf(
-            "Main-Class" to "link.hattivatti.lambda.LambdaApplicationKt"
+            "Main-Class" to "link.hattivatti.app.ApplicationKt"
         ))
     }
 }

@@ -1,10 +1,10 @@
-package link.hattivatti.lambda
+package link.hattivatti.app
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class LambdaApplicationTests {
+class ApplicationTests {
 
 	@Test
 	fun contextLoads() {

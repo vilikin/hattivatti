@@ -8,7 +8,7 @@ export class HattivattiStack extends cdk.Stack {
 
         new SpringBootLambda(this, "UpdatePriceData", {
             functionName: "hattivatti-update-price-data",
-            handlerName: "handler"
+            handlerName: "updatePriceDataLambdaHandler"
         });
     }
 }
@@ -26,7 +26,7 @@ class SpringBootLambda extends Construct {
             functionName: props.functionName,
             memorySize: 512,
             runtime: Runtime.JAVA_11,
-            code: Code.fromAsset("../lambda/build/libs/lambda-0.0.1-SNAPSHOT-aws.jar"),
+            code: Code.fromAsset("../lambda/build/libs/app-0.0.1-SNAPSHOT-aws.jar"),
             handler: "org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest",
             environment: {
                 SPRING_CLOUD_FUNCTION_DEFINITION: props.handlerName
