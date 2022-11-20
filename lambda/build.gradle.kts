@@ -61,7 +61,7 @@ tasks.withType<Jar> {
 }
 
 tasks.withType<ShadowJar> {
-    classifier = "aws"
+    archiveClassifier.set("aws")
     dependencies {
         exclude(dependency("org.springframework.cloud:spring-cloud-function-web"))
     }
