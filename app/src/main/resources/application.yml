@@ -1,0 +1,3 @@
+entsoe:
+  base-url: ${ENTSOE_BASE_URL}
+  security-token: ${ENTSOE_SECURITY_TOKEN}

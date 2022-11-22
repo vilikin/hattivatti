@@ -30,9 +30,22 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-function-web")
     implementation("org.springframework.cloud:spring-cloud-function-kotlin")
     implementation("org.springframework.cloud:spring-cloud-function-adapter-aws")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.6.4")
+
+    implementation("javax.xml.bind:jaxb-api")
+    implementation("org.glassfish.jaxb:jaxb-runtime")
+
     compileOnly("com.amazonaws:aws-lambda-java-events:${property("awsLambdaEventsVersion")}")
     compileOnly("com.amazonaws:aws-lambda-java-core:${property("awsLambdaCoreVersion")}")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.assertj:assertj-core:3.23.1")
+    testImplementation("org.testcontainers:testcontainers:1.17.6")
+    testImplementation("org.testcontainers:junit-jupiter:1.17.6")
+    testImplementation("org.testcontainers:mockserver:1.17.6")
+    testImplementation("org.mock-server:mockserver-client-java:5.14.0")
 }
 
 dependencyManagement {
