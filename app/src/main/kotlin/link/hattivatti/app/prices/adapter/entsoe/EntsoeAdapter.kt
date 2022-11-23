@@ -14,7 +14,7 @@ import kotlin.math.roundToInt
 
 @Component
 class EntsoeAdapter(
-    @Value("\${entsoe.baseUrl}")
+    @Value("\${entsoe.base-url}")
     private val baseUrl: String,
 
     @Value("\${entsoe.security-token}")
