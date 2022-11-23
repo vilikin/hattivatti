@@ -55,7 +55,8 @@ class EntsoeAdapter(
             val start = it.period!!.timeInterval!!.start!!
             it.period.point!!.map { point ->
                 ElectricityPricesForHour(
-                    startTime = start.plusHours(point.position!!.toLong() - 1),
+                    startTime = start.plusHours(point.position!!.toLong() - 1).toInstant(),
+                    endTime = start.plusHours(point.position.toLong()).toInstant(),
                     centsPerMwh = (point.priceAmount!! * 100).roundToInt()
                 )
             }
