@@ -10,5 +10,5 @@ interface RegisterHueUserUseCase {
     //           |
     //      [REGISTERED | DISABLED]
     //
-    fun registerHueUser(authorizationCode: AuthorizationCode)
+    suspend fun registerHueUser(authorizationCode: AuthorizationCode)
 }
