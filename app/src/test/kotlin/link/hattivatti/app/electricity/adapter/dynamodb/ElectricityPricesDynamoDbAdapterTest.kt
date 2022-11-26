@@ -1,5 +1,8 @@
 package link.hattivatti.app.electricity.adapter.dynamodb
 
+import kotlinx.coroutines.reactive.asFlow
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.runBlocking
 import link.hattivatti.app.electricity.adapter.dynamodb.bean.ElectricityPriceForHourDynamoBean
 import link.hattivatti.app.electricity.domain.model.ElectricityPriceForHour
 import link.hattivatti.app.testing.DynamoDbTest
@@ -9,30 +12,30 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.OffsetDateTime
 
-class DynamoDbAdapterTest : DynamoDbTest() {
+class ElectricityPricesDynamoDbAdapterTest : DynamoDbTest() {
 
     companion object {
         private const val TABLE_NAME = "ElectricityPrices"
     }
 
-    private val dynamoDbAdapter = ElectricityPricesDynamoDbAdapter(TABLE_NAME, dynamoDbEnhancedClient)
+    private val dynamoDbAdapter = ElectricityPricesDynamoDbAdapter(TABLE_NAME, dynamoDbEnhancedAsyncClient)
 
-    private val dynamoDbTable = dynamoDbEnhancedClient.table(TABLE_NAME, ElectricityPriceForHourDynamoBean.tableSchema)
+    private val dynamoDbTable = dynamoDbEnhancedAsyncClient.table(TABLE_NAME, ElectricityPriceForHourDynamoBean.tableSchema)
 
     @BeforeEach
     fun createTable() {
-        dynamoDbTable.createTable()
+        dynamoDbTable.createTable().join()
     }
 
     @AfterEach
     fun deleteTable() {
-        dynamoDbClient.deleteTable {
+        dynamoDbAsyncClient.deleteTable {
             it.tableName(TABLE_NAME)
-        }
+        }.join()
     }
 
     @Test
-    fun `should cache electricity prices when cache is empty`() {
+    fun `should cache electricity prices when cache is empty`() = runBlocking<Unit> {
         dynamoDbAdapter.cacheElectricityPrices(
             listOf(
                 ElectricityPriceForHour(
@@ -48,7 +51,7 @@ class DynamoDbAdapterTest : DynamoDbTest() {
             )
         )
 
-        val rows = dynamoDbTable.scan().items()
+        val rows = dynamoDbTable.scan().items().asFlow().toList()
 
         assertThat(rows).containsExactlyInAnyOrder(
             ElectricityPriceForHourDynamoBean(
@@ -65,7 +68,7 @@ class DynamoDbAdapterTest : DynamoDbTest() {
     }
 
     @Test
-    fun `should only cache electricity prices that do not already exist in cache`() {
+    fun `should only cache electricity prices that do not already exist in cache`() = runBlocking<Unit> {
         dynamoDbTable.putItem(
             ElectricityPriceForHourDynamoBean(
                 OffsetDateTime.parse("2022-11-25T18:00:00Z").toInstant().epochSecond,
@@ -89,7 +92,7 @@ class DynamoDbAdapterTest : DynamoDbTest() {
             )
         )
 
-        val rows = dynamoDbTable.scan().items()
+        val rows = dynamoDbTable.scan().items().asFlow().toList()
 
         assertThat(rows).containsExactlyInAnyOrder(
             ElectricityPriceForHourDynamoBean(

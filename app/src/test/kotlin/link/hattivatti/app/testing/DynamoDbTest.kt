@@ -7,9 +7,9 @@ import org.testcontainers.junit.jupiter.Testcontainers
 import org.testcontainers.utility.DockerImageName
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider
-import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedAsyncClient
 import software.amazon.awssdk.regions.Region
-import software.amazon.awssdk.services.dynamodb.DynamoDbClient
+import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 
 @Testcontainers
 open class DynamoDbTest {
@@ -22,7 +22,7 @@ open class DynamoDbTest {
             .withServices(DYNAMODB)
     }
 
-    protected val dynamoDbClient: DynamoDbClient = DynamoDbClient.builder()
+    protected val dynamoDbAsyncClient: DynamoDbAsyncClient = DynamoDbAsyncClient.builder()
         .endpointOverride(container.getEndpointOverride(DYNAMODB))
         .credentialsProvider(
             StaticCredentialsProvider.create(
@@ -32,7 +32,7 @@ open class DynamoDbTest {
         .region(Region.of(container.region))
         .build()
 
-    protected val dynamoDbEnhancedClient: DynamoDbEnhancedClient = DynamoDbEnhancedClient.builder()
-        .dynamoDbClient(dynamoDbClient)
+    protected val dynamoDbEnhancedAsyncClient: DynamoDbEnhancedAsyncClient = DynamoDbEnhancedAsyncClient.builder()
+        .dynamoDbClient(dynamoDbAsyncClient)
         .build()
 }
