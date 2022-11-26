@@ -1,6 +1,12 @@
+hue-remote-api:
+  base-url: http://localhost
+  client-id: placeholder
+  client-secret: placeholder
+
 entsoe-api:
   base-url: http://localhost
   security-token: placeholder
+
 dynamodb:
   electricity-prices:
     table-name: ElectricityPrices

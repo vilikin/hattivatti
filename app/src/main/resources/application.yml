@@ -1,3 +1,8 @@
+hue-remote-api:
+  base-url: ${HUE_REMOTE_API_BASE_URL}
+  client-id: ${HUE_REMOTE_API_CLIENT_ID}
+  client-secret: ${HUE_REMOTE_API_CLIENT_SECRET}
+
 entsoe-api:
   base-url: ${ENTSOE_API_BASE_URL}
   security-token: ${ENTSOE_API_SECURITY_TOKEN}

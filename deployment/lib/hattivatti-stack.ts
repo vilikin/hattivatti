@@ -11,6 +11,24 @@ export class HattivattiStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
 
+        const hueRemoteApiBaseUrl = StringParameter.fromStringParameterName(
+            this,
+            "HueRemoteApiBaseUrl",
+            "/hue-remote-api/base-url"
+        );
+
+        const hueRemoteApiClientId = StringParameter.fromStringParameterName(
+            this,
+            "HueRemoteApiClientId",
+            "/hue-remote-api/client-id"
+        );
+
+        const hueRemoteApiClientSecret = StringParameter.fromStringParameterName(
+            this,
+            "HueRemoteApiClientSecret",
+            "/hue-remote-api/client-secret"
+        );
+
         const entsoeApiBaseUrl = StringParameter.fromStringParameterName(
             this,
             "EntsoeApiBaseUrl",
@@ -35,8 +53,13 @@ export class HattivattiStack extends cdk.Stack {
         });
 
         const lambdaEnvironmentVariables = {
+            HUE_REMOTE_API_BASE_URL: hueRemoteApiBaseUrl.stringValue,
+            HUE_REMOTE_API_CLIENT_ID: hueRemoteApiClientId.stringValue,
+            HUE_REMOTE_API_CLIENT_SECRET: hueRemoteApiClientSecret.stringValue,
+
             ENTSOE_API_BASE_URL: entsoeApiBaseUrl.stringValue,
             ENTSOE_API_SECURITY_TOKEN: entsoeApiSecurityToken.stringValue,
+
             ELECTRICITY_PRICES_DYNAMODB_TABLE_NAME: electricityPricesTable.tableName
         };
 
