@@ -3,7 +3,7 @@ package link.hattivatti.app.prices.adapter.entsoe
 import kotlinx.coroutines.reactive.awaitSingle
 import link.hattivatti.app.prices.adapter.entsoe.dto.PublicationMarketDocument
 import link.hattivatti.app.prices.application.port.driven.FetchElectricityPricesPort
-import link.hattivatti.app.prices.domain.model.ElectricityPricesForHour
+import link.hattivatti.app.prices.domain.model.ElectricityPriceForHour
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
@@ -13,11 +13,11 @@ import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
 @Component
-class EntsoeAdapter(
-    @Value("\${entsoe.base-url}")
+class EntsoeApiAdapter(
+    @Value("\${entsoe-api.base-url}")
     private val baseUrl: String,
 
-    @Value("\${entsoe.security-token}")
+    @Value("\${entsoe-api.security-token}")
     private val securityToken: String
 ) : FetchElectricityPricesPort {
     companion object {
@@ -31,7 +31,7 @@ class EntsoeAdapter(
     override suspend fun fetchElectricityPrices(
         startDate: OffsetDateTime,
         endDate: OffsetDateTime
-    ): List<ElectricityPricesForHour> {
+    ): List<ElectricityPriceForHour> {
         return webClient.get()
             .uri {
                 it.queryParam("securityToken", securityToken)
@@ -50,11 +50,11 @@ class EntsoeAdapter(
             .awaitSingle()
     }
 
-    private fun PublicationMarketDocument.toElectricityPricesForHour(): List<ElectricityPricesForHour> {
+    private fun PublicationMarketDocument.toElectricityPricesForHour(): List<ElectricityPriceForHour> {
         return timeSeries!!.flatMap {
             val start = it.period!!.timeInterval!!.start!!
             it.period.point!!.map { point ->
-                ElectricityPricesForHour(
+                ElectricityPriceForHour(
                     startTime = start.plusHours(point.position!!.toLong() - 1).toInstant(),
                     endTime = start.plusHours(point.position.toLong()).toInstant(),
                     centsPerMwh = (point.priceAmount!! * 100).roundToInt()

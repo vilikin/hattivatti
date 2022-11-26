@@ -34,6 +34,10 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.6.4")
 
+    implementation(platform("software.amazon.awssdk:bom:2.15.0"))
+    implementation("software.amazon.awssdk:dynamodb")
+    implementation("software.amazon.awssdk:dynamodb-enhanced")
+
     implementation("javax.xml.bind:jaxb-api")
     implementation("org.glassfish.jaxb:jaxb-runtime")
 
@@ -41,11 +45,18 @@ dependencies {
     compileOnly("com.amazonaws:aws-lambda-java-core:${property("awsLambdaCoreVersion")}")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+
     testImplementation("org.assertj:assertj-core:3.23.1")
+
+    testImplementation("io.mockk:mockk:1.13.2")
+
     testImplementation("org.testcontainers:testcontainers:1.17.6")
     testImplementation("org.testcontainers:junit-jupiter:1.17.6")
     testImplementation("org.testcontainers:mockserver:1.17.6")
+    testImplementation("org.testcontainers:localstack:1.17.6")
     testImplementation("org.mock-server:mockserver-client-java:5.14.0")
+
+    testRuntimeOnly("com.amazonaws:aws-java-sdk-core:1.12.349")
 }
 
 dependencyManagement {
