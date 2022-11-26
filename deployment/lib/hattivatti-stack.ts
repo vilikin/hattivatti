@@ -55,8 +55,9 @@ export class HattivattiStack extends cdk.Stack {
         new Rule(this, 'RefreshElectricityPriceCacheRule', {
             ruleName: "RefreshElectricityPriceCacheEveryDay",
             schedule: Schedule.cron({
-                // Nord Pool publishes prices for next day around 11:45 UTC every day
-                hour: "12",
+                // Nord Pool publishes prices for next day around 11:45 UTC every day, but Entsoe API is a bit slow to
+                // catch up, so we fetch new prices daily at 13:00 UTC
+                hour: "13",
                 minute: "00"
             }),
             targets: [new LambdaFunction(refreshElectricityPriceCacheFunction)]
