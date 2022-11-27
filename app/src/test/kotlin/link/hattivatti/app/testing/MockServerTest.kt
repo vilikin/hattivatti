@@ -1,6 +1,5 @@
 package link.hattivatti.app.testing
 
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.mockserver.client.MockServerClient
 import org.testcontainers.containers.MockServerContainer
@@ -20,18 +19,13 @@ open class MockServerTest {
         protected val mockServerContainer = MockServerContainer(mockServerImage)
     }
 
-    protected lateinit var mockServerClient: MockServerClient
+    protected val mockServerClient = MockServerClient(
+        mockServerContainer.host,
+        mockServerContainer.serverPort
+    )
 
     @BeforeEach
-    fun beforeEach() {
-        mockServerClient = MockServerClient(
-            mockServerContainer.host,
-            mockServerContainer.serverPort
-        )
-    }
-
-    @AfterEach
-    fun afterEach() {
-        mockServerClient.close()
+    fun resetMockServer() {
+        mockServerClient.reset()
     }
 }
