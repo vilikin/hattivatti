@@ -52,6 +52,15 @@ export class HattivattiStack extends cdk.Stack {
             removalPolicy: RemovalPolicy.DESTROY
         });
 
+        const hueUsersTable = new Table(this, "HueUsersTable", {
+            tableName: "HueUsers",
+            billingMode: BillingMode.PAY_PER_REQUEST,
+            partitionKey: {
+                name: "id",
+                type: AttributeType.STRING
+            }
+        });
+
         const lambdaEnvironmentVariables = {
             HUE_REMOTE_API_BASE_URL: hueRemoteApiBaseUrl.stringValue,
             HUE_REMOTE_API_CLIENT_ID: hueRemoteApiClientId.stringValue,
@@ -60,7 +69,8 @@ export class HattivattiStack extends cdk.Stack {
             ENTSOE_API_BASE_URL: entsoeApiBaseUrl.stringValue,
             ENTSOE_API_SECURITY_TOKEN: entsoeApiSecurityToken.stringValue,
 
-            ELECTRICITY_PRICES_DYNAMODB_TABLE_NAME: electricityPricesTable.tableName
+            ELECTRICITY_PRICES_DYNAMODB_TABLE_NAME: electricityPricesTable.tableName,
+            HUE_USERS_DYNAMODB_TABLE_NAME: hueUsersTable.tableName,
         };
 
         const refreshElectricityPriceCacheFunction = new SpringBootFunction(

@@ -10,3 +10,5 @@ entsoe-api:
 dynamodb:
   electricity-prices:
     table-name: ${ELECTRICITY_PRICES_DYNAMODB_TABLE_NAME}
+  hue-users:
+    table-name: ${HUE_USERS_DYNAMODB_TABLE_NAME}
