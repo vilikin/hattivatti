@@ -10,8 +10,10 @@ import link.hattivatti.app.hue.application.port.driven.ListHueUsersPort
 import link.hattivatti.app.hue.application.port.driven.SaveHueUserPort
 import link.hattivatti.app.hue.domain.model.user.HueUser
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedAsyncClient
 
+@Component
 class HueUserDynamoDbAdapter(
     @Value("\${dynamodb.hue-users.table-name}")
     tableName: String,

@@ -6,6 +6,8 @@ import {SpringBootFunction} from "./constructs/spring-boot-function";
 import {StringParameter} from "aws-cdk-lib/aws-ssm";
 import {Rule, Schedule} from "aws-cdk-lib/aws-events";
 import {LambdaFunction} from "aws-cdk-lib/aws-events-targets";
+import {LambdaIntegration, RestApi} from "aws-cdk-lib/aws-apigateway";
+import {Certificate} from "aws-cdk-lib/aws-certificatemanager";
 
 export class HattivattiStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -95,5 +97,33 @@ export class HattivattiStack extends cdk.Stack {
             }),
             targets: [new LambdaFunction(refreshElectricityPriceCacheFunction)]
         });
+
+        const registerHueUserFunction = new SpringBootFunction(
+            this,
+            "RegisterHueUserFunction",
+            {
+                functionName: "hattivatti-register-hue-user",
+                springCloudFunctionHandlerName: "registerHueUser",
+                environment: lambdaEnvironmentVariables
+            }
+        );
+
+        hueUsersTable.grantReadWriteData(registerHueUserFunction);
+
+        const api = new RestApi(this, "HattivattiApi", {
+            restApiName: "hattivatti-api"
+        });
+
+        api.addDomainName("HattivattiDomain", {
+            domainName: "hattivatti.link",
+            certificate: Certificate.fromCertificateArn(
+                this,
+                "HattivattiDomainCertificate",
+                "arn:aws:acm:eu-north-1:154704856875:certificate/cb73b01f-1c9d-4d10-9268-b91ee737dbd5"
+            )
+        });
+
+        const hueOAuth2CallbackResource = api.root.addResource("hue-oauth2-callback");
+        hueOAuth2CallbackResource.addMethod("POST", new LambdaIntegration(registerHueUserFunction));
     }
 }

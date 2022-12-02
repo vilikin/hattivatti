@@ -43,8 +43,8 @@ dependencies {
     implementation("javax.xml.bind:jaxb-api")
     implementation("org.glassfish.jaxb:jaxb-runtime")
 
-    compileOnly("com.amazonaws:aws-lambda-java-events:${property("awsLambdaEventsVersion")}")
-    compileOnly("com.amazonaws:aws-lambda-java-core:${property("awsLambdaCoreVersion")}")
+    implementation("com.amazonaws:aws-lambda-java-events:${property("awsLambdaEventsVersion")}")
+    implementation("com.amazonaws:aws-lambda-java-core:${property("awsLambdaCoreVersion")}")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 
