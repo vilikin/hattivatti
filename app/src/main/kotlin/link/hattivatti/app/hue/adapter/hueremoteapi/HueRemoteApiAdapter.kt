@@ -2,12 +2,16 @@ package link.hattivatti.app.hue.adapter.hueremoteapi
 
 import kotlinx.coroutines.reactor.awaitSingle
 import link.hattivatti.app.common.time.InstantTimeSource
+import link.hattivatti.app.hue.adapter.hueremoteapi.dto.LightStateDto
 import link.hattivatti.app.hue.adapter.hueremoteapi.dto.SuccessfulOperationDto
 import link.hattivatti.app.hue.adapter.hueremoteapi.dto.TokenResponseDto
 import link.hattivatti.app.hue.adapter.hueremoteapi.dto.UsernameResponseDto
 import link.hattivatti.app.hue.application.port.driven.ExchangeHueUserAuthorizationCodeForTokensPort
 import link.hattivatti.app.hue.application.port.driven.ExchangeHueUserRefreshTokenForTokensPort
 import link.hattivatti.app.hue.application.port.driven.SetupHueUsernamePort
+import link.hattivatti.app.hue.application.port.driven.UpdateHueLightStatePort
+import link.hattivatti.app.hue.domain.model.light.HueLightIdentifier
+import link.hattivatti.app.hue.domain.model.light.HueLightState
 import link.hattivatti.app.hue.domain.model.user.*
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType
@@ -32,7 +36,8 @@ class HueRemoteApiAdapter(
     private val instantTimeSource: InstantTimeSource,
 ) : ExchangeHueUserAuthorizationCodeForTokensPort,
     ExchangeHueUserRefreshTokenForTokensPort,
-    SetupHueUsernamePort {
+    SetupHueUsernamePort,
+    UpdateHueLightStatePort {
 
     companion object {
         private const val DEVICE_TYPE = "hattivatti"
@@ -51,6 +56,25 @@ class HueRemoteApiAdapter(
     override suspend fun setupHueUsername(accessToken: AccessToken): HueUsername {
         executeUsernameSetupFirstStep(accessToken)
         return executeUsernameSetupSecondStep(accessToken)
+    }
+
+    override suspend fun updateLightState(hueUser: HueUser, hueLightId: HueLightIdentifier, hueLightState: HueLightState) {
+        webClient.put()
+            .uri("/route/api/${hueUser.username.username}/lights/${hueLightId.value}/state")
+            .headers {
+                it.setBearerAuth(hueUser.tokens.accessToken.token)
+                it.contentType = MediaType.APPLICATION_JSON
+            }
+            .body(BodyInserters.fromValue(
+                LightStateDto(
+                    on = hueLightState.on,
+                    hue = hueLightState.hue?.value,
+                    saturation = hueLightState.saturation?.value,
+                    brightness = hueLightState.brightness?.value
+                )
+            ))
+            .retrieve()
+            .awaitBodilessEntity()
     }
 
     private suspend fun getTokens(

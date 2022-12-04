@@ -3,13 +3,18 @@ package link.hattivatti.app.hue.adapter.hueremoteapi
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
-import org.mockserver.model.HttpRequest.request
 import link.hattivatti.app.common.time.InstantTimeSource
+import link.hattivatti.app.hue.domain.model.HueUserFixtures
+import link.hattivatti.app.hue.domain.model.light.Hue
+import link.hattivatti.app.hue.domain.model.light.HueLightIdentifier
+import link.hattivatti.app.hue.domain.model.light.HueLightState
 import link.hattivatti.app.hue.domain.model.user.*
-import org.assertj.core.api.Assertions.assertThat
 import link.hattivatti.app.testing.MockServerTest
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.mockserver.model.HttpRequest.request
 import org.mockserver.model.HttpResponse.response
+import org.mockserver.model.JsonBody
 import org.mockserver.model.MediaType
 import java.time.Instant
 
@@ -165,5 +170,59 @@ class HueRemoteApiAdapterTest : MockServerTest() {
         val result = hueRemoteApiAdapter.setupHueUsername(AccessToken("test"))
 
         assertThat(result).isEqualTo(HueUsername("testUsername"))
+    }
+
+    @Test
+    fun `should update light state`() = runBlocking<Unit> {
+        val hueLightId = HueLightIdentifier(123)
+        val hueUser = HueUserFixtures.user
+
+        val expectation = mockServerClient.`when`(
+            request()
+                .withMethod("PUT")
+                .withPath("/route/api/${hueUser.username.username}/lights/${hueLightId.value}/state")
+                .withHeader(
+                    "Authorization",
+                    "Bearer ${hueUser.tokens.accessToken.token}"
+                )
+                .withBody(JsonBody(
+                    """
+                    {
+                        "on": true,
+                        "hue": 12345
+                    }
+                    """
+                ))
+        ).respond(
+            response()
+                .withContentType(MediaType.APPLICATION_JSON)
+                .withBody(
+                    """
+                    [
+                        {
+                            "success": {
+                                "/lights/123/state/on": true
+                            }
+                        },
+                        {
+                            "success": {
+                                "/lights/123/state/hue": 12345
+                            }
+                        }
+                    ]
+                    """
+                )
+        )
+
+        hueRemoteApiAdapter.updateLightState(
+            hueUser = hueUser,
+            hueLightId = hueLightId,
+            hueLightState = HueLightState(
+                on = true,
+                hue = Hue(12345)
+            )
+        )
+
+        mockServerClient.verify(expectation.first().id)
     }
 }
