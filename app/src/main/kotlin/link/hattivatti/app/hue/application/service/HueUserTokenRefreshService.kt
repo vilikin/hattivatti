@@ -14,17 +14,18 @@ class HueUserTokenRefreshService(
     private val exchangeHueUserRefreshTokenForTokensPort: ExchangeHueUserRefreshTokenForTokensPort,
     private val saveHueUsersPort: SaveHueUserPort
 ) : RefreshAllHueUserTokensUseCase {
-    override suspend fun refreshAllHueUserTokens() {
+    override suspend fun refreshAllHueUserTokens() = coroutineScope {
         val hueUsers = listHueUsersPort.listHueUsers()
 
-        coroutineScope {
-            hueUsers.map {
+        hueUsers
+            .map {
                 launch {
                     val newTokenSet = exchangeHueUserRefreshTokenForTokensPort
                         .exchangeHueUserRefreshTokenForTokens(it.tokens.refreshToken)
+
                     saveHueUsersPort.saveHueUser(it.copy(tokens = newTokenSet))
                 }
-            }.forEach { it.join() }
-        }
+            }
+            .forEach { it.join() }
     }
 }

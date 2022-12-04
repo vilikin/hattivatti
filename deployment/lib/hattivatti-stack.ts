@@ -1,5 +1,5 @@
 import * as cdk from 'aws-cdk-lib';
-import {RemovalPolicy} from 'aws-cdk-lib';
+import {Duration, RemovalPolicy} from 'aws-cdk-lib';
 import {Construct} from 'constructs';
 import {AttributeType, BillingMode, Table} from "aws-cdk-lib/aws-dynamodb";
 import {SpringBootFunction} from "./constructs/spring-boot-function";
@@ -134,6 +134,24 @@ export class HattivattiStack extends cdk.Stack {
         });
 
         const hueOAuth2CallbackResource = api.root.addResource("hue-oauth2-callback");
-        hueOAuth2CallbackResource.addMethod("POST", new LambdaIntegration(registerHueUserFunction.currentVersion));
+        hueOAuth2CallbackResource.addMethod("GET", new LambdaIntegration(registerHueUserFunction.currentVersion));
+
+        const refreshAllHueUserTokensFunction = new SpringBootFunction(
+            this,
+            "RefreshAllHueUserTokensFunction",
+            {
+                functionName: "hattivatti-refresh-all-hue-user-tokens",
+                springCloudFunctionHandlerName: "refreshAllHueUserTokens",
+                environment: lambdaEnvironmentVariables
+            }
+        );
+
+        hueUsersTable.grantReadWriteData(refreshAllHueUserTokensFunction);
+
+        new Rule(this, 'RefreshAllHueUserTokensRule', {
+            ruleName: "RefreshAllHueUserTokensEvery6Days",
+            schedule: Schedule.rate(Duration.days(6)),
+            targets: [new LambdaFunction(refreshAllHueUserTokensFunction.currentVersion)]
+        });
     }
 }
