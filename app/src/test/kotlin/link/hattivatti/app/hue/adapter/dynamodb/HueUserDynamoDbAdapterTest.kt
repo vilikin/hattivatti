@@ -6,12 +6,13 @@ import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.runBlocking
 import link.hattivatti.app.hue.adapter.dynamodb.bean.HueUserDynamoBean
 import link.hattivatti.app.hue.adapter.dynamodb.bean.toDynamoBean
+import link.hattivatti.app.hue.domain.exception.UserNotFoundException
 import link.hattivatti.app.hue.domain.model.HueUserFixtures
 import link.hattivatti.app.hue.domain.model.user.AccessToken
 import link.hattivatti.app.hue.domain.model.user.HueUserIdentifier
 import link.hattivatti.app.hue.domain.model.user.RefreshToken
 import link.hattivatti.app.testing.DynamoDbTest
-import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.*
 import java.time.Instant
 import java.util.*
@@ -103,6 +104,50 @@ class HueUserDynamoDbAdapterTest : DynamoDbTest() {
                 user1,
                 user2
             )
+        }
+    }
+
+    @Nested
+    @DisplayName("findHueUser()")
+    inner class FindHueUser {
+        @Test
+        fun `should find Hue user`() = runBlocking<Unit> {
+            val user1Id = HueUserIdentifier(UUID.fromString("a1dcdc39-74c1-4a1e-ae0c-606696a7191b"))
+            val user1 = HueUserFixtures.user.copy(
+                id = user1Id
+            )
+
+            val user2Id = HueUserIdentifier(UUID.fromString("111926b2-2630-470e-9108-5c0507e019c8"))
+            val user2 = HueUserFixtures.user.copy(
+                id = user2Id
+            )
+
+            table.putItem(user1.toDynamoBean()).await()
+            table.putItem(user2.toDynamoBean()).await()
+
+            val user = adapter.findHueUser(user2Id)
+
+            assertThat(user).isEqualTo(user2)
+        }
+
+        @Test
+        fun `should throw UserNotFoundException if user does not exist`() = runBlocking<Unit> {
+            val user1Id = HueUserIdentifier(UUID.fromString("a1dcdc39-74c1-4a1e-ae0c-606696a7191b"))
+            val user1 = HueUserFixtures.user.copy(
+                id = user1Id
+            )
+
+            table.putItem(user1.toDynamoBean()).await()
+
+            val user2Id = HueUserIdentifier(UUID.fromString("111926b2-2630-470e-9108-5c0507e019c8"))
+
+            assertThatThrownBy {
+                runBlocking {
+                    adapter.findHueUser(
+                        user2Id
+                    )
+                }
+            }.isInstanceOf(UserNotFoundException::class.java)
         }
     }
 }
