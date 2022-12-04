@@ -5,9 +5,9 @@ import link.hattivatti.app.hue.domain.light.model.HueLightState
 import link.hattivatti.app.hue.domain.user.model.HueUserIdentifier
 
 interface UpdateHueLightStateUseCase {
-    fun updateLightState(
+    suspend fun updateLightState(
         hueUserId: HueUserIdentifier,
-        hueLightIdentifier: HueLightIdentifier,
+        hueLightId: HueLightIdentifier,
         hueLightState: HueLightState
     )
 }
