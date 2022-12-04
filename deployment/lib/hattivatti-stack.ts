@@ -8,6 +8,8 @@ import {Rule, Schedule} from "aws-cdk-lib/aws-events";
 import {LambdaFunction} from "aws-cdk-lib/aws-events-targets";
 import {LambdaIntegration, RestApi} from "aws-cdk-lib/aws-apigateway";
 import {Certificate} from "aws-cdk-lib/aws-certificatemanager";
+import {ARecord, HostedZone, RecordTarget} from 'aws-cdk-lib/aws-route53';
+import {ApiGateway} from "aws-cdk-lib/aws-route53-targets";
 
 export class HattivattiStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -95,7 +97,7 @@ export class HattivattiStack extends cdk.Stack {
                 hour: "13",
                 minute: "00"
             }),
-            targets: [new LambdaFunction(refreshElectricityPriceCacheFunction)]
+            targets: [new LambdaFunction(refreshElectricityPriceCacheFunction.currentVersion)]
         });
 
         const registerHueUserFunction = new SpringBootFunction(
@@ -123,7 +125,15 @@ export class HattivattiStack extends cdk.Stack {
             )
         });
 
+        new ARecord(this, 'CustomDomainAliasRecord', {
+            zone: HostedZone.fromHostedZoneAttributes(this, 'HattivattiHostedZone', {
+                hostedZoneId: "Z04986902YX9XWLXDKF06",
+                zoneName: "hattivatti.link"
+            }),
+            target: RecordTarget.fromAlias(new ApiGateway(api))
+        });
+
         const hueOAuth2CallbackResource = api.root.addResource("hue-oauth2-callback");
-        hueOAuth2CallbackResource.addMethod("POST", new LambdaIntegration(registerHueUserFunction));
+        hueOAuth2CallbackResource.addMethod("POST", new LambdaIntegration(registerHueUserFunction.currentVersion));
     }
 }
