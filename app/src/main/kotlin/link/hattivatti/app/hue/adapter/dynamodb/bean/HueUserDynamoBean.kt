@@ -1,6 +1,6 @@
 package link.hattivatti.app.hue.adapter.dynamodb.bean
 
-import link.hattivatti.app.hue.domain.model.user.*
+import link.hattivatti.app.hue.domain.user.model.*
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema
 import software.amazon.awssdk.enhanced.dynamodb.mapper.BeanTableSchema
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean

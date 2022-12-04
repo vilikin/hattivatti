@@ -1,4 +1,4 @@
-package link.hattivatti.app.hue.domain.model.light
+package link.hattivatti.app.hue.domain.light.model
 
 data class HueLightState(
     val on: Boolean? = null,

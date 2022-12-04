@@ -10,8 +10,8 @@ import link.hattivatti.app.hue.application.port.driven.ExchangeHueUserAuthorizat
 import link.hattivatti.app.hue.application.port.driven.SaveHueUserPort
 import link.hattivatti.app.hue.application.port.driven.SetupHueUsernamePort
 import link.hattivatti.app.hue.domain.model.HueUserFixtures
-import link.hattivatti.app.hue.domain.model.user.AuthorizationCode
-import link.hattivatti.app.hue.domain.model.user.HueUserIdentifier
+import link.hattivatti.app.hue.domain.user.model.AuthorizationCode
+import link.hattivatti.app.hue.domain.user.model.HueUserIdentifier
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.util.*

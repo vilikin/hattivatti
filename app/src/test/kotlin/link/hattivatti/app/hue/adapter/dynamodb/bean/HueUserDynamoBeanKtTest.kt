@@ -1,6 +1,6 @@
 package link.hattivatti.app.hue.adapter.dynamodb.bean
 
-import link.hattivatti.app.hue.domain.model.user.*
+import link.hattivatti.app.hue.domain.user.model.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.Instant

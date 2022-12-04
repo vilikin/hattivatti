@@ -6,11 +6,11 @@ import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.runBlocking
 import link.hattivatti.app.hue.adapter.dynamodb.bean.HueUserDynamoBean
 import link.hattivatti.app.hue.adapter.dynamodb.bean.toDynamoBean
-import link.hattivatti.app.hue.domain.exception.UserNotFoundException
+import link.hattivatti.app.hue.domain.user.exception.UserNotFoundException
 import link.hattivatti.app.hue.domain.model.HueUserFixtures
-import link.hattivatti.app.hue.domain.model.user.AccessToken
-import link.hattivatti.app.hue.domain.model.user.HueUserIdentifier
-import link.hattivatti.app.hue.domain.model.user.RefreshToken
+import link.hattivatti.app.hue.domain.user.model.AccessToken
+import link.hattivatti.app.hue.domain.user.model.HueUserIdentifier
+import link.hattivatti.app.hue.domain.user.model.RefreshToken
 import link.hattivatti.app.testing.DynamoDbTest
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.*

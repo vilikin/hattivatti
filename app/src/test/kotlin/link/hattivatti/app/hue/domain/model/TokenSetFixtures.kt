@@ -1,8 +1,8 @@
 package link.hattivatti.app.hue.domain.model
 
-import link.hattivatti.app.hue.domain.model.user.AccessToken
-import link.hattivatti.app.hue.domain.model.user.RefreshToken
-import link.hattivatti.app.hue.domain.model.user.TokenSet
+import link.hattivatti.app.hue.domain.user.model.AccessToken
+import link.hattivatti.app.hue.domain.user.model.RefreshToken
+import link.hattivatti.app.hue.domain.user.model.TokenSet
 import java.time.Instant
 
 object TokenSetFixtures {

@@ -1,8 +1,8 @@
 package link.hattivatti.app.hue.domain.model
 
-import link.hattivatti.app.hue.domain.model.user.HueUser
-import link.hattivatti.app.hue.domain.model.user.HueUserIdentifier
-import link.hattivatti.app.hue.domain.model.user.HueUsername
+import link.hattivatti.app.hue.domain.user.model.HueUser
+import link.hattivatti.app.hue.domain.user.model.HueUserIdentifier
+import link.hattivatti.app.hue.domain.user.model.HueUsername
 import java.util.*
 
 object HueUserFixtures {

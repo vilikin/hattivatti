@@ -5,10 +5,10 @@ import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import link.hattivatti.app.common.time.InstantTimeSource
 import link.hattivatti.app.hue.domain.model.HueUserFixtures
-import link.hattivatti.app.hue.domain.model.light.Hue
-import link.hattivatti.app.hue.domain.model.light.HueLightIdentifier
-import link.hattivatti.app.hue.domain.model.light.HueLightState
-import link.hattivatti.app.hue.domain.model.user.*
+import link.hattivatti.app.hue.domain.light.model.Hue
+import link.hattivatti.app.hue.domain.light.model.HueLightIdentifier
+import link.hattivatti.app.hue.domain.light.model.HueLightState
+import link.hattivatti.app.hue.domain.user.model.*
 import link.hattivatti.app.testing.MockServerTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

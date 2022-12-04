@@ -7,7 +7,7 @@ import kotlinx.coroutines.runBlocking
 import link.hattivatti.app.hue.application.port.driven.ExchangeHueUserRefreshTokenForTokensPort
 import link.hattivatti.app.hue.application.port.driven.ListHueUsersPort
 import link.hattivatti.app.hue.application.port.driven.SaveHueUserPort
-import link.hattivatti.app.hue.domain.model.user.*
+import link.hattivatti.app.hue.domain.user.model.*
 import org.junit.jupiter.api.Test
 import java.time.Duration
 import java.time.Instant

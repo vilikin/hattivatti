@@ -10,9 +10,9 @@ import link.hattivatti.app.hue.application.port.driven.ExchangeHueUserAuthorizat
 import link.hattivatti.app.hue.application.port.driven.ExchangeHueUserRefreshTokenForTokensPort
 import link.hattivatti.app.hue.application.port.driven.SetupHueUsernamePort
 import link.hattivatti.app.hue.application.port.driven.UpdateHueLightStatePort
-import link.hattivatti.app.hue.domain.model.light.HueLightIdentifier
-import link.hattivatti.app.hue.domain.model.light.HueLightState
-import link.hattivatti.app.hue.domain.model.user.*
+import link.hattivatti.app.hue.domain.light.model.HueLightIdentifier
+import link.hattivatti.app.hue.domain.light.model.HueLightState
+import link.hattivatti.app.hue.domain.user.model.*
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component

@@ -4,7 +4,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import kotlinx.coroutines.runBlocking
 import link.hattivatti.app.hue.application.port.driving.RegisterHueUserUseCase
-import link.hattivatti.app.hue.domain.model.user.AuthorizationCode
+import link.hattivatti.app.hue.domain.user.model.AuthorizationCode
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
