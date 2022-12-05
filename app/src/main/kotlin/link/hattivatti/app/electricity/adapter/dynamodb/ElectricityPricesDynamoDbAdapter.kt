@@ -4,8 +4,10 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.reactive.asFlow
 import link.hattivatti.app.electricity.adapter.dynamodb.bean.ElectricityPriceForHourDynamoBean
+import link.hattivatti.app.electricity.adapter.dynamodb.bean.toDomainModel
 import link.hattivatti.app.electricity.adapter.dynamodb.bean.toDynamoBean
 import link.hattivatti.app.electricity.application.port.driven.CacheElectricityPricesPort
+import link.hattivatti.app.electricity.application.port.driven.ListElectricityPricesPort
 import link.hattivatti.app.electricity.domain.model.ElectricityPriceForHour
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -18,7 +20,7 @@ class ElectricityPricesDynamoDbAdapter(
     electricityPricesTableName: String,
 
     dynamoDbEnhancedAsyncClient: DynamoDbEnhancedAsyncClient
-) : CacheElectricityPricesPort {
+) : CacheElectricityPricesPort, ListElectricityPricesPort {
 
     private val logger = LoggerFactory.getLogger(ElectricityPricesDynamoDbAdapter::class.java)
 
@@ -41,4 +43,12 @@ class ElectricityPricesDynamoDbAdapter(
             }
             .forEach { it.await() }
     }
+
+    override suspend fun listElectricityPrices(): List<ElectricityPriceForHour> = electricityPricesTable
+        .scan()
+        .items()
+        .asFlow()
+        .toList()
+        .map { it.toDomainModel() }
+        .sortedBy { it.startTime }
 }

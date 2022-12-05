@@ -113,7 +113,25 @@ export class HattivattiStack extends cdk.Stack {
         hueUsersTable.grantReadWriteData(registerHueUserFunction);
 
         const api = new RestApi(this, "HattivattiApi", {
-            restApiName: "hattivatti-api"
+            restApiName: "hattivatti-api",
+            defaultMethodOptions: {
+                apiKeyRequired: false
+            }
+        });
+
+        const apiKey = api.addApiKey("SahkoSeppoApiKey", {
+            apiKeyName: "SahkoSeppo",
+            description: "API key for SähköSeppo mobile app"
+        });
+
+        const usagePlan = api.addUsagePlan("StandardUsagePlan", {
+            name: "Standard"
+        });
+
+        usagePlan.addApiKey(apiKey);
+        usagePlan.addApiStage({
+            api,
+            stage: api.deploymentStage
         });
 
         api.addDomainName("HattivattiDomain", {
@@ -153,5 +171,26 @@ export class HattivattiStack extends cdk.Stack {
             schedule: Schedule.rate(Duration.days(6)),
             targets: [new LambdaFunction(refreshAllHueUserTokensFunction.currentVersion)]
         });
+
+        const listElectricityPricesFunction = new SpringBootFunction(
+            this,
+            "ListElectricityPricesFunction",
+            {
+                functionName: "hattivatti-list-electricity-prices",
+                springCloudFunctionHandlerName: "listElectricityPrices",
+                environment: lambdaEnvironmentVariables
+            }
+        );
+
+        electricityPricesTable.grantReadData(listElectricityPricesFunction);
+
+        const electricityPricesResource = api.root.addResource("electricity-prices");
+        electricityPricesResource.addMethod(
+            "GET",
+            new LambdaIntegration(listElectricityPricesFunction.currentVersion),
+            {
+                apiKeyRequired: true
+            }
+        );
     }
 }
