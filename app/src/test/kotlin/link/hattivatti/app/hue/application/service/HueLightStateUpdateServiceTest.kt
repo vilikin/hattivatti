@@ -6,7 +6,6 @@ import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import link.hattivatti.app.hue.application.port.driven.FindHueUserPort
 import link.hattivatti.app.hue.application.port.driven.UpdateHueLightStatePort
-import link.hattivatti.app.hue.domain.light.model.Hue
 import link.hattivatti.app.hue.domain.light.model.HueLightIdentifier
 import link.hattivatti.app.hue.domain.light.model.HueLightState
 import link.hattivatti.app.hue.domain.model.HueUserFixtures
@@ -27,8 +26,7 @@ class HueLightStateUpdateServiceTest {
         val user = HueUserFixtures.user
         val hueLightIdentifier = HueLightIdentifier(123)
         val requestedHueLightState = HueLightState(
-            on = true,
-            hue = Hue(12345)
+            on = true
         )
 
         coEvery {

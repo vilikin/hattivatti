@@ -68,9 +68,8 @@ class HueRemoteApiAdapter(
             .body(BodyInserters.fromValue(
                 LightStateDto(
                     on = hueLightState.on,
-                    hue = hueLightState.hue?.value,
-                    saturation = hueLightState.saturation?.value,
-                    brightness = hueLightState.brightness?.value
+                    xy = hueLightState.color?.let { arrayOf(hueLightState.color.x, hueLightState.color.y) },
+                    bri = hueLightState.brightness?.value
                 )
             ))
             .retrieve()

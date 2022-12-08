@@ -3,9 +3,9 @@ package link.hattivatti.app.hue.adapter.hueremoteapi
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
+import link.hattivatti.app.common.color.XyColor
 import link.hattivatti.app.common.time.InstantTimeSource
 import link.hattivatti.app.hue.domain.model.HueUserFixtures
-import link.hattivatti.app.hue.domain.light.model.Hue
 import link.hattivatti.app.hue.domain.light.model.HueLightIdentifier
 import link.hattivatti.app.hue.domain.light.model.HueLightState
 import link.hattivatti.app.hue.domain.user.model.*
@@ -189,7 +189,7 @@ class HueRemoteApiAdapterTest : MockServerTest() {
                     """
                     {
                         "on": true,
-                        "hue": 12345
+                        "xy": [0.1, 0.2]
                     }
                     """
                 ))
@@ -206,7 +206,7 @@ class HueRemoteApiAdapterTest : MockServerTest() {
                         },
                         {
                             "success": {
-                                "/lights/123/state/hue": 12345
+                                "/lights/123/state/xy": [0.1, 0.2]
                             }
                         }
                     ]
@@ -219,7 +219,7 @@ class HueRemoteApiAdapterTest : MockServerTest() {
             hueLightId = hueLightId,
             hueLightState = HueLightState(
                 on = true,
-                hue = Hue(12345)
+                color = XyColor(x = 0.1, y = 0.2)
             )
         )
 

@@ -97,7 +97,7 @@ export class HattivattiStack extends cdk.Stack {
                 hour: "13",
                 minute: "00"
             }),
-            targets: [new LambdaFunction(refreshElectricityPriceCacheFunction.currentVersion)]
+            targets: [new LambdaFunction(refreshElectricityPriceCacheFunction)]
         });
 
         const registerHueUserFunction = new SpringBootFunction(
@@ -152,7 +152,7 @@ export class HattivattiStack extends cdk.Stack {
         });
 
         const hueOAuth2CallbackResource = api.root.addResource("hue-oauth2-callback");
-        hueOAuth2CallbackResource.addMethod("GET", new LambdaIntegration(registerHueUserFunction.currentVersion));
+        hueOAuth2CallbackResource.addMethod("GET", new LambdaIntegration(registerHueUserFunction));
 
         const refreshAllHueUserTokensFunction = new SpringBootFunction(
             this,
@@ -169,7 +169,7 @@ export class HattivattiStack extends cdk.Stack {
         new Rule(this, 'RefreshAllHueUserTokensRule', {
             ruleName: "RefreshAllHueUserTokensEvery6Days",
             schedule: Schedule.rate(Duration.days(6)),
-            targets: [new LambdaFunction(refreshAllHueUserTokensFunction.currentVersion)]
+            targets: [new LambdaFunction(refreshAllHueUserTokensFunction)]
         });
 
         const listElectricityPricesFunction = new SpringBootFunction(
@@ -187,10 +187,31 @@ export class HattivattiStack extends cdk.Stack {
         const electricityPricesResource = api.root.addResource("electricity-prices");
         electricityPricesResource.addMethod(
             "GET",
-            new LambdaIntegration(listElectricityPricesFunction.currentVersion),
+            new LambdaIntegration(listElectricityPricesFunction),
             {
                 apiKeyRequired: true
             }
         );
+
+        const updateLightStatesBasedOnElectricityPriceFunction = new SpringBootFunction(
+            this,
+            "UpdateLightStatesBasedOnElectricityPriceFunction",
+            {
+                functionName: "hattivatti-update-light-states-based-on-electricity-price",
+                springCloudFunctionHandlerName: "updateLightStatesBasedOnElectricityPrice",
+                environment: lambdaEnvironmentVariables
+            }
+        );
+
+        electricityPricesTable.grantReadData(updateLightStatesBasedOnElectricityPriceFunction);
+        hueUsersTable.grantReadData(updateLightStatesBasedOnElectricityPriceFunction);
+
+        new Rule(this, 'UpdateLightStatesBasedOnElectricityPriceRule', {
+            ruleName: "UpdateLightStatesBasedOnElectricityPriceEveryHour",
+            schedule: Schedule.cron({
+                minute: "0"
+            }),
+            targets: [new LambdaFunction(updateLightStatesBasedOnElectricityPriceFunction)]
+        });
     }
 }

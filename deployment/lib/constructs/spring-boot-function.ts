@@ -1,4 +1,4 @@
-import {CfnFunction, Code, Function, FunctionProps, Runtime} from "aws-cdk-lib/aws-lambda";
+import {Code, Function, FunctionProps, Runtime} from "aws-cdk-lib/aws-lambda";
 import {Construct} from "constructs";
 import {Duration} from "aws-cdk-lib";
 
@@ -20,12 +20,6 @@ export class SpringBootFunction extends Function {
 
             memorySize: props.memorySize ?? 1024,
             timeout: Duration.seconds(30)
-        });
-
-        // SnapStart is not yet available in L2 construct:
-        // https://github.com/aws/aws-cdk/issues/23153
-        (this.node.defaultChild as CfnFunction).addPropertyOverride('SnapStart', {
-            ApplyOn: 'PublishedVersions',
         });
     }
 }
