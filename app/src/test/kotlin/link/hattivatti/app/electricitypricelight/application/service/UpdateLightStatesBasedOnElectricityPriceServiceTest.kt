@@ -100,7 +100,6 @@ class UpdateLightStatesBasedOnElectricityPriceServiceTest {
                 hueUser = hueUser1,
                 hueLightId = HueLightIdentifier(STATIC_TEMPORARY_LIGHT_ID),
                 hueLightState = HueLightState(
-                    on = true,
                     color = RgbColor.BLUE.toXyColor(),
                     brightness = Brightness(STATIC_BRIGHTNESS)
                 )
@@ -110,7 +109,6 @@ class UpdateLightStatesBasedOnElectricityPriceServiceTest {
                 hueUser = hueUser2,
                 hueLightId = HueLightIdentifier(STATIC_TEMPORARY_LIGHT_ID),
                 hueLightState = HueLightState(
-                    on = true,
                     color = RgbColor.BLUE.toXyColor(),
                     brightness = Brightness(STATIC_BRIGHTNESS)
                 )

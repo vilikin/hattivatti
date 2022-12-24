@@ -51,7 +51,6 @@ class UpdateLightStatesBasedOnElectricityPriceService(
                     hueUser = user,
                     hueLightId = HueLightIdentifier(STATIC_TEMPORARY_LIGHT_ID),
                     hueLightState = HueLightState(
-                        on = true,
                         color = colorForPrice,
                         brightness = Brightness(STATIC_BRIGHTNESS)
                     )
