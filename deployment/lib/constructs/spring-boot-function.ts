@@ -2,7 +2,7 @@ import {Code, Function, FunctionProps, Runtime} from "aws-cdk-lib/aws-lambda";
 import {Construct} from "constructs";
 import {Duration} from "aws-cdk-lib";
 
-export interface SpringBootFunctionProps extends Omit<FunctionProps, "runtime" | "code" | "handler"> {
+export interface SpringBootFunctionProps extends Omit<FunctionProps, "runtime" | "code" | "handler" | "timeout"> {
     springCloudFunctionHandlerName: string;
 }
 
