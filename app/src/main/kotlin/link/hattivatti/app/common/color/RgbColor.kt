@@ -2,7 +2,6 @@ package link.hattivatti.app.common.color
 
 import kotlin.math.pow
 
-
 data class RgbColor(
     val r: Int,
     val g: Int,
