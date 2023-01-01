@@ -10,6 +10,7 @@ import {ListElectricityPricesEndpoint} from "./features/list-electricity-prices-
 import {
     HourlyLightStateUpdateBasedOnElectricityPrice
 } from "./features/hourly-light-state-update-based-on-electricity-price";
+import {BlinkLightsInCaseOfElectricityShortage} from "./features/blink-lights-in-case-of-electricity-shortage";
 
 export class HattivattiStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -44,5 +45,7 @@ export class HattivattiStack extends cdk.Stack {
             "HourlyLightStateUpdateBasedOnElectricityPrice",
             tables
         );
+
+        new BlinkLightsInCaseOfElectricityShortage(this, "BlinkLightsInCaseOfElectricityShortage", tables);
     }
 }

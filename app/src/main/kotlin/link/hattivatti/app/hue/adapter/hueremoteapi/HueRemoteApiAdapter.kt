@@ -10,6 +10,7 @@ import link.hattivatti.app.hue.application.port.driven.ExchangeHueUserAuthorizat
 import link.hattivatti.app.hue.application.port.driven.ExchangeHueUserRefreshTokenForTokensPort
 import link.hattivatti.app.hue.application.port.driven.SetupHueUsernamePort
 import link.hattivatti.app.hue.application.port.driven.UpdateHueLightStatePort
+import link.hattivatti.app.hue.domain.light.model.HueAlertMode
 import link.hattivatti.app.hue.domain.light.model.HueLightIdentifier
 import link.hattivatti.app.hue.domain.light.model.HueLightState
 import link.hattivatti.app.hue.domain.user.model.*
@@ -69,7 +70,13 @@ class HueRemoteApiAdapter(
                 LightStateDto(
                     on = hueLightState.on,
                     xy = hueLightState.color?.let { arrayOf(hueLightState.color.x, hueLightState.color.y) },
-                    bri = hueLightState.brightness?.value
+                    bri = hueLightState.brightness?.value,
+                    alert = hueLightState.alert?.let {
+                        when (it) {
+                            HueAlertMode.BLINK_ONCE -> "select"
+                            HueAlertMode.BLINK_MULTIPLE_TIMES -> "lselect"
+                        }
+                    }
                 )
             ))
             .retrieve()
