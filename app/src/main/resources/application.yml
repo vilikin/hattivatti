@@ -7,6 +7,10 @@ entsoe-api:
   base-url: ${ENTSOE_API_BASE_URL}
   security-token: ${ENTSOE_API_SECURITY_TOKEN}
 
+fingrid-api:
+  base-url: ${FINGRID_API_BASE_URL}
+  api-key: ${FINGRID_API_KEY}
+
 dynamodb:
   electricity-prices:
     table-name: ${ELECTRICITY_PRICES_DYNAMODB_TABLE_NAME}

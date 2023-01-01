@@ -7,6 +7,10 @@ entsoe-api:
   base-url: http://localhost
   security-token: placeholder
 
+fingrid-api:
+  base-url: http://localhost
+  api-key: placeholder
+
 dynamodb:
   electricity-prices:
     table-name: ElectricityPrices

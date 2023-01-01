@@ -25,6 +25,9 @@ export class HattivattiFunction extends SpringBootFunction {
                 ENTSOE_API_BASE_URL: StringParameter.valueForStringParameter(scope, "/entsoe-api/base-url"),
                 ENTSOE_API_SECURITY_TOKEN: StringParameter.valueForStringParameter(scope, "/entsoe-api/security-token"),
 
+                FINGRID_API_BASE_URL: StringParameter.valueForStringParameter(scope, "/fingrid-api/base-url"),
+                FINGRID_API_KEY: StringParameter.valueForStringParameter(scope, "/fingrid-api/api-key"),
+
                 ELECTRICITY_PRICES_DYNAMODB_TABLE_NAME: props.electricityPricesTable.tableName,
                 HUE_USERS_DYNAMODB_TABLE_NAME: props.hueUsersTable.tableName,
             }

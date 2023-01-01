@@ -10,7 +10,7 @@ import org.mockserver.model.HttpResponse.response
 import org.mockserver.model.MediaType
 import java.time.OffsetDateTime
 
-class EntsoeAdapterTest : MockServerTest() {
+class EntsoeApiAdapterTest : MockServerTest() {
     private val securityToken = "security token"
 
     private val entsoeAdapter = EntsoeApiAdapter(
