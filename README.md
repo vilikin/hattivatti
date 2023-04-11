@@ -11,4 +11,3 @@ cd app
 cd ../deployment
 npm run cdk deploy
 ```
-
