@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement
 import javax.xml.bind.annotation.adapters.XmlAdapter
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter
 
-private const val NAMESPACE = "urn:iec62325.351:tc57wg16:451-3:publicationdocument:7:0"
+private const val NAMESPACE = "urn:iec62325.351:tc57wg16:451-3:publicationdocument:7:3"
 
 @XmlRootElement(name = "Publication_MarketDocument", namespace = NAMESPACE)
 @XmlAccessorType(XmlAccessType.FIELD)
